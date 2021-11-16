@@ -1,0 +1,20 @@
+---
+- name: install and configure web service
+  hosts: httpd
+  tasks:
+    - name: Remove {{ web_package }} package
+      yum:
+        name: "{{ web_package }}"
+        state: absent
+
+    - name: Remove web service files
+      file:
+        path: "{{ dest_dir }}"
+        state: absent
+
+    - name: Disable the firewall port for {{ web_service }}
+      firewalld: 
+        port: 80/tcp 
+        permanent: true 
+        state: disabled 
+        immediate: yes

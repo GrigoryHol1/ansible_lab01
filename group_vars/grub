@@ -1,0 +1,4 @@
+grub_cmdline_add_args:
+  - biosdevname=0
+  - net.ifnames=0
+grub_cmdline_path: /etc/default/grub

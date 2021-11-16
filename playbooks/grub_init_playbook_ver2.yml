@@ -1,0 +1,14 @@
+---
+- name: Config grub file
+  hosts: grub
+  tasks:
+    - lineinfile:
+        dest: "{{ grub_cmdline_path }}"
+        line: GRUB_CMDLINE_LINUX="{{ grub_cmdline_add_args | join(' ') }}"
+        regexp: '^GRUB_CMDLINE_LINUX="'
+      notify:
+        -  Update grub config
+     
+  handlers:
+    - name: Update grub config
+      shell: grub2-mkconfig -o /boot/grub2/grub.cfg

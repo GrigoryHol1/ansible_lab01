@@ -1,0 +1,8 @@
+[nodes]
+node[1:2].example.com
+
+[httpd]
+node1.example.com
+
+[grub]
+node1.example.com

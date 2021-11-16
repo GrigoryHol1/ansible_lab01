@@ -1,0 +1,17 @@
+---
+- name: Config grub file
+  hosts: grub
+  tasks:
+    - lineinfile:
+        state: present    
+        dest: "{{ grub_cmdline_path }}"
+        backrefs: yes
+        regexp: '^(GRUB_CMDLINE_LINUX=(?!.*net.ifnames)\"[^\"]+)(\".*)'
+        line: '\1 net.ifnames=0 biosdevname=0\2'
+
+      notify:
+        -  Update grub config
+
+  handlers:
+    - name: Update grub config
+      shell: grub2-mkconfig -o /boot/grub2/grub.cfg

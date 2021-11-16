@@ -1,0 +1,4 @@
+web_package: httpd
+web_service: httpd
+dest_dir: /var/www/html/
+source_dir: ../files/

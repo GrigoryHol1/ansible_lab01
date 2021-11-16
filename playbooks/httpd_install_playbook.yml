@@ -1,0 +1,49 @@
+---
+- name: install and configure web service
+  hosts: httpd
+  tasks:
+    - name: Install {{ web_package }} package
+      yum:
+        name: "{{ web_package }}"
+        state: present
+    
+    - name: Copy web service files
+      copy:
+        src: "{{ source_dir}}"
+        dest: "{{ dest_dir }}"
+      notify:
+        - restart_web 
+
+    - name: Start & Enable {{ web_service }} service
+      service:
+        name: "{{ web_service }}"
+        state: started
+        enabled: yes
+
+    - name: Get service facts
+      service_facts:
+      register: services_state
+
+    #Речь идет про такую проверку или я не так понял задачу.
+    - name: Check {{ web_service }} service status 
+      debug:
+        msg: '{{ ansible_facts.services["httpd.service"] }}'
+
+    - name: Start & Enable Firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Enable the firewall port for {{ web_service }}
+      firewalld: 
+        port: 80/tcp 
+        permanent: true 
+        state: enabled 
+        immediate: yes
+
+  handlers:
+    - name: restart_web
+      service:
+        name: httpd
+        state: restarted        

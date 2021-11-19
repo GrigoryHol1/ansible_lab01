@@ -1,0 +1,29 @@
+---
+- name: Create users
+  hosts: all
+  vars_files:
+    - ../group_vars/user_pass.yml  
+  tasks:
+    - name: Creating user Alice
+      user:
+        name: alice
+        comment: alice@example.com
+        password: "{{ alice_pass | password_hash('sha512') }}"
+        update_password: on_create
+        home: /home/alice
+
+    - name: Creating user Bob
+      user:
+        name: bob
+        comment: bob@example.com
+        password: "{{ bob_pass | password_hash('sha512') }}"
+        update_password: on_create
+        home: /home/bob
+
+    - name: Creating user Carol
+      user:
+        name: carol
+        comment: carol@example.com
+        password: "{{ carol_pass | password_hash('sha512') }}"
+        update_password: on_create
+        home: /home/carol

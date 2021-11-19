@@ -1,0 +1,22 @@
+---
+- name: Remove users
+  hosts: all
+  
+  tasks:
+    - name: Removing user Alice
+      user:
+        name: alice
+        state: absent
+        remove: yes
+ 
+    - name: Removing user Bob
+      user:
+        name: bob
+        state: absent
+        remove: yes
+ 
+    - name: Removing user Carol
+      user:
+        name: carol
+        state: absent
+        remove: yes

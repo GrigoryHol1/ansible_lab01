@@ -6,3 +6,6 @@ node1.example.com
 
 [grub]
 node1.example.com
+
+[vsftpd]
+node2.example.com

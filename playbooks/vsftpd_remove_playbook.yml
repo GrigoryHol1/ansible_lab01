@@ -1,0 +1,21 @@
+---
+- name: install and configure web service
+  hosts: vsftpd
+  tasks:
+    - name: Remove {{ ftp_package }} package
+      yum:
+        name: "{{ ftp_package }}"
+        state: absent
+
+        #    - name: Remove web service files
+        #file:
+        #path: "{{ dest_dir }}"
+        #state: absent
+
+    - name: Disable the firewall port for {{ ftp_service }}
+      firewalld:
+        port: 30000-31000/tcp
+        permanent: true
+        state: disabled
+        immediate: yes
+

@@ -1,0 +1,12 @@
+ftp_package: vsftpd
+ftp_service: vsftpd
+dest_dir: /etc/vsftpd/vsftpd.conf
+src_dir: /etc/ansible/lab_01/templates/vsftpd.j2
+ftp_ports: 
+  - 20:21/tcp
+anonymous_enable: yes
+local_enable: yes
+write_enable: yes
+anon_upload_enable: yes
+anon_root: /var/ftp/pub 
+#  - /var/ftp/pub/upload

@@ -1,0 +1,57 @@
+---
+- name: Install and configure {{ ftp_service }} service
+  hosts: vsftpd 
+  vars_files:
+    - ../group_vars/vsftpd
+  tasks:
+  - name: install {{ ftp_package }} package
+    yum:
+      name: "{{ ftp_package }}"
+      state: present
+
+  - name: use template to copy FTP config
+    template:
+      src: "{{ src_dir }}" 
+      dest: "{{ dest_dir }}"
+      owner: root
+      group: root
+      mode: "0644"
+    notify:
+      - restart_ftp     
+
+  - name: Start & Enable {{ ftp_service }} service
+    service:
+      name: "{{ ftp_service }}"
+      state: started
+      enabled: yes  
+ 
+  - name: Start & Enable Firewall
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+
+  - name: Enable the firewall port for {{ ftp_service }}
+    firewalld:
+      port: 30000-31000/tcp
+      permanent: true
+      state: enabled
+      immediate: yes      
+
+  - name: Allow read/write access
+    seboolean:
+      name: ftpd_anon_write 
+      state: yes
+      persistent: yes
+
+  - name: Allow full read/write access
+    seboolean:
+      name: ftpd_full_access
+      state: yes
+      persistent: yes
+
+  handlers:
+  - name: restart_ftp
+    service:
+      name: "{{ ftp_service }}"
+      state: restarted      

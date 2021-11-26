@@ -17,8 +17,15 @@
       group: root
       mode: "0644"
     notify:
-      - restart_ftp     
+      - restart_ftp
 
+  - name: 
+    file:
+      path: /var/ftp/pub
+      group: users
+      mode: 0575
+      state: directory    
+  
   - name: Start & Enable {{ ftp_service }} service
     service:
       name: "{{ ftp_service }}"
@@ -33,7 +40,7 @@
 
   - name: Enable the firewall port for {{ ftp_service }}
     firewalld:
-      port: 30000-31000/tcp
+      port: 30000/tcp
       permanent: true
       state: enabled
       immediate: yes      
@@ -47,8 +54,8 @@
   - name: Allow full read/write access
     seboolean:
       name: ftpd_full_access
-      state: yes
-      persistent: yes
+      state: no
+      persistent: no
 
   handlers:
   - name: restart_ftp
